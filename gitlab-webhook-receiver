@@ -8,32 +8,37 @@
 #
 # File : gitlab-webhook-receiver
 
+### BEGIN INIT INFO
+# Provides:          gitlab-webhook-receiver
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts gitlab webhook receiver
+# Description:       Enable service provided by gitlab-webhook-receiver.
+### END INIT INFO
+
 # Source function library.
-. /etc/init.d/functions
-
-# Source networking configuration.
-. /etc/sysconfig/network
-
-# Check that networking is up.
-[ "$NETWORKING" = "no" ] && exit 0
+. /lib/lsb/init-functions
 
 prog="/var/lib/puppet/gitlab-webhook-receiver/gitlab-webhook-receiver.py"
+name="gitlab-webhook-receiver"
 PROG_USER="puppet"
 RETVAL=0
 
 start () {
         echo -n "Starting $prog"
-        /usr/bin/sudo -u $PROG_USER  "$prog" &
+        /usr/bin/sudo -u $PROG_USER "$prog" &
         RETVAL=$?
-        [ $RETVAL -eq 0 ] && success || failure
+        [ $RETVAL -eq 0 ] && log_success_msg || log_failure_msg
         echo
 }
 
 stop () {
         echo -n "Stopping $prog"
-        killproc $prog
+        /usr/bin/sudo -u $PROG_USER /usr/bin/pkill -2 -f "$prog"
         RETVAL=$?
-        [ $RETVAL -eq 0 ] && success || failure
+        [ $RETVAL -eq 0 ] && log_success_msg || log_failure_msg
         echo
 }
 
@@ -55,7 +60,7 @@ case "$1" in
         restart
         ;;
   status)
-        status $prog
+        status_of_proc "$prog" "$name"
         RETVAL=$?
         ;;
   *)
