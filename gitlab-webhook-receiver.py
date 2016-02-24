@@ -115,6 +115,7 @@ class webhookReceiver(BaseHTTPRequestHandler):
                     if not short_name == "master":
                         current_branches.append(short_name)
                         fwd = os.path.join(git_dir, short_name)
+                        link_dir = os.path.join(fwd, "packages")
                         if os.path.isdir(fwd):
                             os.chdir(fwd)
                             log.debug('cwd:%s' % fwd)
@@ -122,10 +123,16 @@ class webhookReceiver(BaseHTTPRequestHandler):
                             output = self.run_it(cmd)
                             cmd = "git pull"
                             output = self.run_it(cmd)
+                            if not os.path.isdir(link_dir):
+                                cmd = "ln -s /etc/puppet/packages packages"
+                                output = self.run_it(cmd)
                         else:
                             os.chdir(git_dir)
                             cmd = "git clone -b %s %s:%s %s" % (
                                 short_name, git_ssh, git_project, short_name)
+                            output = self.run_it(cmd)
+                            os.chdir(fwd)
+                            cmd = "ln -s /etc/puppet/packages packages"
                             output = self.run_it(cmd)
         log.debug('git_handle_branches ends')
         return current_branches
