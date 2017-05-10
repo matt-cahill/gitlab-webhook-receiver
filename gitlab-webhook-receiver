@@ -21,7 +21,7 @@
 # Source function library.
 . /lib/lsb/init-functions
 
-prog="/var/lib/puppet/gitlab-webhook-receiver/gitlab-webhook-receiver.py"
+prog="/opt/gitlab-webhook-receiver/gitlab-webhook-receiver.py"
 name="gitlab-webhook-receiver"
 PROG_USER="puppet"
 RETVAL=0
