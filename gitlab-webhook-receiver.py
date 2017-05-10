@@ -36,13 +36,13 @@ import subprocess
 ##### You will likely need to change some of the below #####
 
 # log file for this script
-log_file = '/var/lib/puppet/gitlab-webhook-receiver/webhook.log'
+log_file = '/opt/gitlab-webhook-receiver/webhook.log'
 
 # where the puppet base git dir is
-git_dir = "/etc/puppet/environments"
+git_dir = "/etc/puppetlabs/code/environments"
 
 # the puppet master environment
-git_master_dir = "/etc/puppet/environments/master"
+git_master_dir = "/etc/puppetlabs/code/environments/master"
 
 # this is the name of the gitlab project name
 git_project = "newpuppet"
